@@ -4,4 +4,5 @@ Execute the program without arguments to see how to use.
 Mechanisms: Selenium + Python
 
 > Why would you create a bot that make random sales orders on MarketUP? It doesn't make any sense.
+
 Yeah, it doesn't. But I would have to do this manually 100 times, thus I created this.
