@@ -86,8 +86,11 @@ time.sleep(8)
 
 for i in range(int(arg_number)):
 
-    stupid_cookies_window = driver.find_element_by_class_name("banner-lgpd-consent.banner-lgpd-consent-show")
-    driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", stupid_cookies_window)
+    try:
+        stupid_cookies_window = driver.find_element_by_class_name("banner-lgpd-consent.banner-lgpd-consent-show")
+        driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", stupid_cookies_window)
+    except NoSuchElementException as e:
+        print("there is no stupid cookies element:" + str(e))
 
     driver.get("https://" + address + ".marketup.com/index.html#/sale_order/new")
 
@@ -96,7 +99,7 @@ for i in range(int(arg_number)):
     driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", stupid_unknown_div)
     name_input = driver.find_element_by_name("clientName")
     name_input.send_keys(random.choice(names))
-    time.sleep(3)
+    time.sleep(4)
 
     try:
         suggestion_name = driver.find_element(By.CLASS_NAME, 'uib-typeahead-match.ng-scope.active')
@@ -106,11 +109,11 @@ for i in range(int(arg_number)):
         new_client_button.click()
         print("new client")
     except Exception as e:
-        print("unknown error!" + e)
+        print("unknown error!" + str(e))
 
-    time.sleep(2)
+    time.sleep(3)
 
-    address_text = driver.find_element_by_xpath("//*[text()=' para informar o endereço depois']")
+    address_text = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[ng-click*='controller.setSkipAddress()']")))
     address_text.click()
 
     item_number = random.randint(2, 4)
@@ -119,7 +122,7 @@ for i in range(int(arg_number)):
         item_input.send_keys(random.choice(products_services))
         time.sleep(4)
 
-        suggestion_item = driver.find_element(By.CLASS_NAME, "uib-typeahead-match.ng-scope.active")
+        suggestion_item = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CLASS_NAME, "uib-typeahead-match.ng-scope.active")))
         suggestion_item.click()
         time.sleep(3)
 
@@ -145,7 +148,7 @@ for i in range(int(arg_number)):
     finish_sell.click()
 
     time.sleep(5)
-    ok = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
+    ok = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
     while 1:
         try:
             ok.click()
@@ -157,7 +160,7 @@ for i in range(int(arg_number)):
 
     time.sleep(1)
     deliver = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[ng-click*='controller.showDeliveryModal()']")))
-    if deliver.get_attribute("disabled") == "disabled":
+    if deliver.get_attribute('disabled'):
         print("only services")
     else:
         deliver.click()
@@ -167,15 +170,16 @@ for i in range(int(arg_number)):
         finish_deliver.click()
 
         time.sleep(6)
-        ok = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
+        ok = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
         ok.click()
 
     stupid_unknown_div = driver.find_element_by_class_name("ads-free-wrapper.ng-scope")
     driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", stupid_unknown_div)
+    time.sleep(1)
 
     receive = driver.find_element_by_xpath("//*[contains(text(), 'RECEBER')]")
     ActionChains(driver).move_to_element(receive).perform()
-    time.sleep(1)
+    time.sleep(2)
     receive.click()
 
     time.sleep(5)
@@ -184,7 +188,7 @@ for i in range(int(arg_number)):
     try:
         money_input.click()
     except Exception as e:
-        print(e + "not clickable")
+        print(str(e) + "not clickable")
         money_input.send_keys("q")
 
     account_type = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "select[ng-model*='controller.currentEntryEvent.Entry.Account']")))
@@ -192,13 +196,15 @@ for i in range(int(arg_number)):
     select.select_by_visible_text('Caixa')
 
     receive_button = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-block.bt-confirm.ng-scope")
+    ActionChains(driver).move_to_element(receive_button).perform()
+    time.sleep(1)
     receive_button.click()
 
     finish_receive = driver.find_element_by_id("receivable_new_pagar_receber")
     finish_receive.click()
 
     time.sleep(6)
-    ok = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
+    ok = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[ng-click*='controller.close()']")))
     ok.click()
 
 # driver.quit()
