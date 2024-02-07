@@ -193,6 +193,7 @@ for i in range(int(arg_number)):
 
     account_type = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "select[ng-model*='controller.currentEntryEvent.Entry.Account']")))
     select = Select(account_type)
+    time.sleep(1)
     select.select_by_visible_text('Caixa')
 
     receive_button = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-block.bt-confirm.ng-scope")
