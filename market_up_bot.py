@@ -126,10 +126,10 @@ for i in range(int(arg_number)):
         suggestion_item.click()
         time.sleep(3)
 
-        suggestion_item = driver.find_element(By.CLASS_NAME, "glyphicon.glyphicon-plus-sign")
+        plus = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "glyphicon.glyphicon-plus-sign")))
         random_item_qtd = random.randint(1, 4)
         for j in range(random_item_qtd):
-            suggestion_item.click()
+            plus.click()
 
         add_item_button = driver.find_element(By.CLASS_NAME, "bt-add-item")
         add_item_button.click()
